@@ -8,7 +8,7 @@ module.exports = {
 		//絶対パスを取得する　現在のフォルダの階層
 		path: path.resolve(__dirname, './dist'),
 		//ファイル名を変更する場合
-		filename: 'main.js',
+		//filename: 'main.js',
 	},
 	//モジュールというオプションを追加
 	module: {
@@ -20,6 +20,12 @@ module.exports = {
 				test: /\.css/,
 				//配列を追加　.cssがあったらローダーを使いなさいという指示
 				use: [
+					//注意、loaderは下から適応される
+					{
+					//読み込んだモジュールを下記で処理
+						loader: 'style-loader',
+					},
+					//スタイルを適応
 					{
 						loader: 'css-loader',
 					},
