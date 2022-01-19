@@ -1,4 +1,7 @@
 const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+//HTMLファイルも自動で出力する
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
 	//エントリーポイント
@@ -15,15 +18,17 @@ module.exports = {
 		//ルールという配列を追加
 		rules: [
 			{
-				//配列を追加  バックスラッシュでドットをエスケープ　正規表現(//で囲まれた書き方をする）
+				//配列を追加  バックスラッシュでドットをエスケープ正規表現(//で囲まれた書き方をする）
 				//.cssを検出する指示
 				test: /\.css/,
-				//配列を追加　.cssがあったらローダーを使いなさいという指示
+				//配列を追加.cssがあったらローダーを使いなさいという指示
 				use: [
 					//注意、loaderは下から適応される
 					{
-					//読み込んだモジュールを下記で処理
-						loader: 'style-loader',
+					//読み込んだモジュールを下記で処理 cssをスタイルで読み込む
+						//loader: 'style-loader',
+						// loader: 'style-loader', 削除
+            loader: MiniCssExtractPlugin.loader, // ローダーを別のを追加
 					},
 					//スタイルを適応
 					{
@@ -33,4 +38,11 @@ module.exports = {
 			},
 		],
 	},
+	  // プラグイン追加
+  plugins: [
+		new MiniCssExtractPlugin(),
+		new HtmlWebpackPlugin({
+			template: './src/index.html',
+		}),
+  ],
 }
