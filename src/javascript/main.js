@@ -1,7 +1,7 @@
 //自分で作ったモジュールを読み込む
-import my from './modules/my';
+import my from './my.js';
 //モジュールとしてcssファイルをjsに読み込む
-import './modules/my.css';
+import '../stylesheets/main.css';
 
 console.log('This is index.js');
 my();
