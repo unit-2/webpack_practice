@@ -38,6 +38,21 @@ module.exports = {
 					},
 				],
 			},
+			{
+				//画像を読み込む
+				test: /\.(png|jpg)/,
+				use: [
+					{
+						//loader: 'url-loader',画像の読み込みから変更
+						loader: 'file-loader',
+						options: {
+							esModule: false,
+							//オリジナルファイルのファイル名 オリジナルファイルの拡張子
+							name: 'images/[name].[ext]',
+						},
+					},
+				]
+			},
 		],
 	},
 	  // プラグイン追加
