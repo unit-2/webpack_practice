@@ -22,7 +22,7 @@ module.exports = {
 			{
 				//配列を追加  バックスラッシュでドットをエスケープ正規表現(//で囲まれた書き方をする）
 				//.cssを検出する指示
-				test: /\.css/,
+				test: /\.(css|scss|sass)$/,
 				//配列を追加.cssがあったらローダーを使いなさいという指示
 				use: [
 					//注意、loaderは下から適応される
@@ -36,22 +36,30 @@ module.exports = {
 					{
 						loader: 'css-loader',
 					},
+					{
+            loader: 'sass-loader',
+          },
 				],
 			},
 			{
 				//画像を読み込む
 				test: /\.(png|jpg)/,
-				use: [
-					{
-						//loader: 'url-loader',画像の読み込みから変更
-						loader: 'file-loader',
-						options: {
-							esModule: false,
-							//オリジナルファイルのファイル名 オリジナルファイルの拡張子
-							name: 'images/[name].[ext]',
-						},
-					},
-				],
+				// 追加
+        type: 'asset/resource',
+        generator: {
+          filename: 'images/[name][ext]',
+        },
+				// use: [
+				// 	{
+				// 		//loader: 'url-loader',画像の読み込みから変更
+				// 		loader: 'file-loader',
+				// 		options: {
+				// 			esModule: false,
+				// 			//オリジナルファイルのファイル名 オリジナルファイルの拡張子
+				// 			name: 'images/[name].[ext]',
+				// 		},
+				// 	},
+				// ],
 			},
 			{
 				test: /\.pug/,
@@ -81,6 +89,10 @@ module.exports = {
 		new HtmlWebpackPlugin({
 			template: './src/templates/access.pug',
 			filename: 'access.html',
+		}),
+		new HtmlWebpackPlugin({
+			template: './src/templates/members/taro.pug',
+			filename: 'members/taro.html',
 		}),
 		new CleanWebpackPlugin(),
   ],
