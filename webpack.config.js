@@ -21,7 +21,7 @@ module.exports = {
 		rules: [
 			{
 				//配列を追加  バックスラッシュでドットをエスケープ正規表現(//で囲まれた書き方をする）
-				//.cssを検出する指示
+				//.css .scss .sassを検出する指示
 				test: /\.(css|scss|sass)$/,
 				//配列を追加.cssがあったらローダーを使いなさいという指示
 				use: [
@@ -35,9 +35,33 @@ module.exports = {
 					//スタイルを適応
 					{
 						loader: 'css-loader',
+						options: {
+							// オプションでCSS内のurl()メソッドの取り込みを禁止する
+							url: false,
+						}
 					},
+					// PostCSSのための設定
+          {
+            loader: "postcss-loader",
+            options: {
+              // PostCSS側でもソースマップを有効にする
+              // sourceMap: true,
+              postcssOptions: {
+                plugins: [
+                  // Autoprefixerを有効化
+                  // ベンダープレフィックスを自動付与する
+                  ["autoprefixer", { grid: true }],
+                ],
+              },
+            },
+					},
+					// Sassをバンドルするための機能
 					{
-            loader: 'sass-loader',
+						loader: 'sass-loader',
+						options: {
+              // ソースマップの利用有無
+              sourceMap: true,
+            },
           },
 				],
 			},
