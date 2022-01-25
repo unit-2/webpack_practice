@@ -5,8 +5,15 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 //不要なファイル削除
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+//プラグインの読み込み
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+
 
 module.exports = {
+	//開発用のコードをビルド（デフォルトはproduction）
+	mode: 'development',
+	//Javascriptのソースマップ表示
+	devtool: 'source-map',
 	//エントリーポイント
 	entry: './src/javascript/main.js',
 	//出力先
@@ -21,23 +28,36 @@ module.exports = {
 		//ルールという配列を追加
 		rules: [
 			{
-				//JSに関する設定
-				//babelを使ってES6をトランスパイルする
-				test: /\.js/,
-				//node_modulesの中にあるファイルは対象外にする
+				//vueというファイルがあった場合
+				test: /\.vue/,
+				//node_modulesは除外
         exclude: /node_modules/,
         use: [
           {
-            loader: 'babel-loader',
-            options: {
-							presets: [
-								//optionの中にさらにoptionを配列で追加 トランスパイルするかブラウザを指定する
-								['@babel/preset-env', { "targets": "> 0.25%, not dead" }],
-							]
-            },
+            loader: 'vue-loader',
           },
         ],
       },
+			{
+				//JSに関する設定
+				//babelを使ってES6をトランスパイルする
+				test: /\.(js|jsx)/,
+				//node_modulesの中にあるファイルは対象外にする
+				exclude: /node_modules/,
+				use: [
+					{
+						loader: 'babel-loader',
+						options: {
+							presets: [
+								//optionの中にさらにoptionを配列で追加 トランスパイルするかブラウザを指定する
+								['@babel/preset-env', { targets: '> 0.25%, not dead' }],
+								// 追加
+								'@babel/preset-react',
+							],
+						},
+					},
+				],
+			},
 			{
 				//配列を追加  バックスラッシュでドットをエスケープ正規表現(//で囲まれた書き方をする）
 				//.css .scss .sassを検出する指示
@@ -46,11 +66,11 @@ module.exports = {
 				use: [
 					//注意、loaderは下から適応される
 					{
-					//読み込んだモジュールを下記で処理 cssをスタイルで読み込む
+						//読み込んだモジュールを下記で処理 cssをスタイルで読み込む
 						//CSSを適用
 						//loader: 'style-loader',
 						//style-loaderの代わりにMiniCssExtractPlugin.loaderが役割を果たす
-            loader: MiniCssExtractPlugin.loader,
+						loader: MiniCssExtractPlugin.loader,
 					},
 					//スタイルを適応
 					//読み込んだCSS
@@ -58,61 +78,71 @@ module.exports = {
 						loader: 'css-loader',
 						options: {
 							//scssのソースマップ(※ソースマップを出力すると重くなるので開発のとき以外はfalseにしておくとよい
-							//sourceMap: true, //開発のときのみtrue
+							sourceMap: false, //開発のときのみtrue
 							// オプションでCSS内のurl()メソッドの取り込みを禁止する
 							url: false,
-						}
+						},
 					},
 					// PostCSSのための設定
-          {
-            loader: "postcss-loader",
-            options: {
-              // PostCSS側でもソースマップを有効にする
-              // sourceMap: true,
-              postcssOptions: {
-                plugins: [
-                  // Autoprefixerを有効化
-                  // ベンダープレフィックスを自動付与する
-                  ["autoprefixer", { grid: true }],
-                ],
-              },
-            },
+					{
+						loader: 'postcss-loader',
+						options: {
+							// PostCSS側でもソースマップを有効にする
+							// sourceMap: true,
+							postcssOptions: {
+								plugins: [
+									// Autoprefixerを有効化
+									// ベンダープレフィックスを自動付与する
+									['autoprefixer', { grid: true }],
+								],
+							},
+						},
 					},
 					// Sassをバンドルするための機能
 					{
 						loader: 'sass-loader',
 						// options: {
-            //   // ソースマップの利用有無
-            //   sourceMap: true,
-            // },
-          },
+						//   // ソースマップの利用有無
+						//   sourceMap: true,
+						// },
+					},
 				],
 			},
 			{
 				//画像を読み込む
-				test: /\.(png|jpg)/,
+				test: /\.(png|jpg|jpeg)/,
 				// 追加
-        type: 'asset/resource',
-        generator: {
-          filename: 'images/[name][ext]',
-        },
-				// use: [
-				// 	{
-				// 		//loader: 'url-loader',画像の読み込みから変更
-				// 		loader: 'file-loader',
-				// 		options: {
-				// 			esModule: false,
-				// 			//オリジナルファイルのファイル名 オリジナルファイルの拡張子
-				// 			name: 'images/[name].[ext]',
-				// 		},
-				// 	},
-				// ],
+				type: 'asset/resource',
+				generator: {
+					filename: 'images/[name][ext]',
+				},
+				use: [
+					// 	{
+					// 		//loader: 'url-loader',画像の読み込みから変更
+					// 		loader: 'file-loader',
+					// 		options: {
+					// 			esModule: false,
+					// 			//オリジナルファイルのファイル名 オリジナルファイルの拡張子
+					// 			name: 'images/[name].[ext]',
+					// 		},
+					// 	},
+					{
+						//画像の自動最適化
+						loader: 'image-webpack-loader',
+						options: {
+							mozjpeg: {
+								progressive: true,
+								quality: 65,
+							},
+						},
+					},
+				],
 			},
 			{
 				test: /\.pug/,
 				use: [
 					{
-						loader: 'html-loader'
+						loader: 'html-loader',
 					},
 					{
 						loader: 'pug-html-loader',
@@ -121,12 +151,14 @@ module.exports = {
 						},
 					},
 				],
-			}
+			},
 		],
 	},
 	// プラグイン追加
 	//注意: 並列関係,「plugin:」ではなくplugins:
-  plugins: [
+	plugins: [
+		//Vueプラグイン
+		new VueLoaderPlugin(),
 		new MiniCssExtractPlugin({
 			filename: './stylesheets/main.css',
 		}),
@@ -143,5 +175,5 @@ module.exports = {
 			filename: 'members/taro.html',
 		}),
 		new CleanWebpackPlugin(),
-  ],
-}
+	],
+};

@@ -1,16 +1,4 @@
-/*!**********************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[1].use[2]!./node_modules/sass-loader/dist/cjs.js!./src/stylesheets/main.scss ***!
-  \**********************************************************************************************************************************************************************************************************************/
-.footer {
-  background-color: #ddd; }
+.footer{background-color:#ddd}body{color:lightblue}.content .title,.content .title-lg{font-size:24px;color:orange}.content .title-lg{font-size:32px}
 
-body {
-  color: lightblue; }
-
-.content .title, .content .title-lg {
-  font-size: 24px;
-  color: orange; }
-
-.content .title-lg {
-  font-size: 32px; }
+p[data-v-3b0b1e98]{color:green}
 
