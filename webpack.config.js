@@ -28,6 +28,15 @@ module.exports = {
 		//ルールという配列を追加
 		rules: [
 			{
+        test: /\.(ts|tsx)$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'ts-loader',
+          },
+        ],
+      },
+			{
 				//vueというファイルがあった場合
 				test: /\.vue/,
 				//node_modulesは除外

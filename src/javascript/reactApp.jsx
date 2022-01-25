@@ -2,12 +2,15 @@
 import ReactDom from 'react-dom';
 //react本体
 import * as React from 'react';
+// 追加
+import Alert from './Alert.tsx';
 
 //コンポーネントを定義
 const App = (props) => {
 	return (
 		<div style={{ color: '#000'}}>
-      Hello, React App!
+			Hello, React App!
+			<Alert message="Success!" />
     </div>
   );
 };
