@@ -5,8 +5,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 //不要なファイル削除
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-//プラグインの読み込み
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 
 module.exports = {
@@ -33,17 +31,6 @@ module.exports = {
         use: [
           {
             loader: 'ts-loader',
-          },
-        ],
-      },
-			{
-				//vueというファイルがあった場合
-				test: /\.vue/,
-				//node_modulesは除外
-        exclude: /node_modules/,
-        use: [
-          {
-            loader: 'vue-loader',
           },
         ],
       },
@@ -166,8 +153,6 @@ module.exports = {
 	// プラグイン追加
 	//注意: 並列関係,「plugin:」ではなくplugins:
 	plugins: [
-		//Vueプラグイン
-		new VueLoaderPlugin(),
 		new MiniCssExtractPlugin({
 			filename: './stylesheets/main.css',
 		}),
