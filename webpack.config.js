@@ -18,7 +18,8 @@ module.exports = {
 		//絶対パスを取得する　現在のフォルダの階層
 		path: path.resolve(__dirname, './dist'),
 		//ファイル名を変更する場合
-		filename: 'javascripts/main.js',
+		//filename: 'javascripts/main.js',
+		filename: 'javascripts/[name]-[contenthash].js', // キャッシュ対応名前を随時変更
 		publicPath: '/',
 	},
 	//モジュールというオプションを追加
@@ -109,7 +110,8 @@ module.exports = {
 				// 追加
 				type: 'asset/resource',
 				generator: {
-					filename: 'images/[name][ext]',
+					//filename: 'images/[name][ext]',
+					filename: 'images/[name]-[contenthash][ext]', // キャッシュ対応、名前を随時変更
 				},
 				use: [
 					// 	{
@@ -153,7 +155,8 @@ module.exports = {
 	//注意: 並列関係,「plugin:」ではなくplugins:
 	plugins: [
 		new MiniCssExtractPlugin({
-			filename: './stylesheets/main.css',
+			//filename: './stylesheets/main.css',
+			filename: './stylesheets/[name]-[contenthash].css', // キャッシュ対応　名前を随時変更
 		}),
 		new HtmlWebpackPlugin({
 			template: './src/templates/index.pug',
