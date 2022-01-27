@@ -6,7 +6,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 //不要なファイル削除
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
-
 module.exports = {
 	//開発用のコードをビルド（デフォルトはproduction）
 	mode: 'development',
@@ -19,21 +18,22 @@ module.exports = {
 		//絶対パスを取得する　現在のフォルダの階層
 		path: path.resolve(__dirname, './dist'),
 		//ファイル名を変更する場合
-		filename: 'javascripts/main.js', // 変更
+		filename: 'javascripts/main.js',
+		publicPath: '/',
 	},
 	//モジュールというオプションを追加
 	module: {
 		//ルールという配列を追加
 		rules: [
 			{
-        test: /\.(ts|tsx)$/,
-        exclude: /node_modules/,
-        use: [
-          {
-            loader: 'ts-loader',
-          },
-        ],
-      },
+				test: /\.(ts|tsx)$/,
+				exclude: /node_modules/,
+				use: [
+					{
+						loader: 'ts-loader',
+					},
+				],
+			},
 			{
 				//JSに関する設定
 				//babelを使ってES6をトランスパイルする
@@ -47,7 +47,6 @@ module.exports = {
 							presets: [
 								//optionの中にさらにoptionを配列で追加 トランスパイルするかブラウザを指定する
 								['@babel/preset-env', { targets: '> 0.25%, not dead' }],
-								// 追加
 								'@babel/preset-react',
 							],
 						},
@@ -74,9 +73,9 @@ module.exports = {
 						loader: 'css-loader',
 						options: {
 							//scssのソースマップ(※ソースマップを出力すると重くなるので開発のとき以外はfalseにしておくとよい
-							sourceMap: false, //開発のときのみtrue
+							sourceMap: true, //開発のときのみtrue
 							// オプションでCSS内のurl()メソッドの取り込みを禁止する
-							url: false,
+							//url: false,
 						},
 					},
 					// PostCSSのための設定
